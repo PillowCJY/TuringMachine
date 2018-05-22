@@ -95,7 +95,9 @@ public class Simulator {
 					reader.close();
 					break;
 				} catch (Exception e){
-					continue;
+					sc.close();
+					System.out.println("Reading File error !");
+					return;
 				}
 			} 
 			else {
@@ -105,40 +107,17 @@ public class Simulator {
 			}
 			/*End while*/
 		}
+		sc.close();
+		System.out.println("------------------------------------------------------------------");
+		System.out.println("159.331 Assignment 2 Semester 1 2018");
+		System.out.println("Submitted by: Junyi Chen, 16192554");
+		System.out.println("------------------------------------------------------------------");
 		/*Instantiate a new Turing Machine*/
 		TuringMachine myMachine = new TuringMachine(machineState, machineAlphabet, machineInputAlphabet, initialState, finalState, instructionTable);
 		
+		/*Start simulating*/
 		myMachine.simulate();
 		
-		
-		
-		/*Debugging
-		System.out.println("States are : ");
-		for(String s : machineState){
-			System.out.println(s);
-		}
-		
-		
-		System.out.println("Alphabets are : ");
-		for(String s : machineAlphabet){
-			System.out.println(s);
-		}
-		
-		System.out.println("Input Alphabets are : ");
-		for(String s : machineInputAlphabet){
-			System.out.println(s);
-		}
-		
-		System.out.println("Initial State is : ");
-		System.out.println(initialState);
-		
-		System.out.println("Final State is : ");
-		System.out.println(finalState);
-		
-		System.out.println("Insturctions are : ");
-		for(Instruction i : instructionTable){
-			i.printInsturction();
-		}*/
 		
 		
 	}

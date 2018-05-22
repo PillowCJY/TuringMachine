@@ -23,6 +23,9 @@ public class TuringMachine {
 	/*final State*/
 	private String finalState;
 	
+	/*Current state*/
+	private String currentState;
+	
 	/*head of the tape*/
 	private int head;
 	
@@ -40,6 +43,7 @@ public class TuringMachine {
 			instructionTable = table;
 			initialState = initialS;
 			finalState = finalS;
+			currentState = initialState;
 			head = 0;
 			/*initialise tape with input alphabet*/
 			for(String s : machineInputAlphabet){
@@ -49,6 +53,10 @@ public class TuringMachine {
 	
 	/* write to tape at position head */
 	public void writeToTape(String alph){
+		/*If outof bound*/
+		if(head == machineTape.size()-1 ){
+			machineTape.add("^");
+		}
 		machineTape.set(head, alph);
 	}
 	
@@ -76,9 +84,82 @@ public class TuringMachine {
 		printInitialState();
 		printFinalState();
 		printInstructions();
+		printTape();
 		
+		/*Start simulating*/
+		System.out.println("Simulating Machine : ");
+		/*Print the initial tape*/
+		printTape();
+		while(!currentState.equals(finalState) ){
+			
+			/*Variables needed for next move*/
+			int nextMove = 0;
+			String nextState = "";
+			String newSymbol = "";
+			
+			/*Checking instructions*/
+			for(Instruction ins : instructionTable){
+				/*find the correct instruction*/
+				if(ins.checkStateAndSymbol(currentState, readFromTape())){
+					nextMove = ins.getMove();
+					nextState = ins.getNewState();
+					newSymbol = ins.getNewSymbol();
+					break;
+				}
+			}
+			/*Error if any of the value is not assigned*/
+			if(nextMove !=  -1 && nextMove != 1 ||  nextState == "" || newSymbol == ""){
+				System.out.println("Program failed!");
+				return;
+			}
+			/*Change current state to new state*/
+			currentState = nextState;
+			
+			/*write the new symbol to head*/
+			writeToTape(newSymbol);
+			
+			/*move tape*/
+			switch(nextMove){
+				case 1:
+					moveRight();
+					break;
+				case -1:
+					moveLeft();
+					break;
+			}
+			
+			/*Error if head is less than 0*/
+			if(head < 0){
+				System.out.println("Program failed!");
+				return;
+			}
+			/*Print the tape*/
+			printTape();
 		
+		}
+		/*End while*/
+		/*Program Halted*/
+		if(currentState.equals(finalState)){
+			System.out.println("Program Halted (Success)");
+		}
 	}
+	
+	/*Print the tape*/
+	public void printTape(){
+		System.out.print(currentState + " : ");
+		int i = 0;
+		for(String str : machineTape){
+			if(i == head){ /*head position*/
+				i++;
+				System.out.print(str + "< ");
+				continue;
+			}
+			System.out.print(str + " ");
+			i++;
+		}
+		System.out.println();
+	}
+	
 	
 	/*Print the states*/
 	public void printState(){

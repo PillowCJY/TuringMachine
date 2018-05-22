@@ -21,8 +21,8 @@ public class Instruction {
 		movement = move;
 		
 	}
-	/*Return true if state and symbo match the instruction*/
-	public boolean checkStateAndSymbol(String myState, Character mySymbol){
+	/*Return true if state and symbol match the instruction*/
+	public boolean checkStateAndSymbol(String myState, String mySymbol){
 		return (myState.equals(state)&& mySymbol.equals(symbol));
 	}
 	
